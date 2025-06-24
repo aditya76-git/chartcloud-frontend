@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useUserStatsStore from "@/store/use-user-stats-store";
+import useUserStatsStore from "@/store/user-stats-store";
 import { ChartPie, Loader2, User } from "lucide-react";
 import { useEffect } from "react";
 import { Pie, PieChart } from "recharts";

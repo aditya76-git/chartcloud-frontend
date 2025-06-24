@@ -12,8 +12,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { UsersRound, User, Loader2, DollarSignIcon, UsersIcon, CalendarIcon, FilePenIcon, SirenIcon, TrainTrackIcon, Trash2, Shield, ShieldOff, CircleUser, ShieldUser } from 'lucide-react';
-import useUsersStore from "@/store/use-users-store";
-import useUserStatsStore from "@/store/use-user-stats-store";
+import useUsersStore from "@/store/users-store";
+import useUserStatsStore from "@/store/user-stats-store";
 import {
     Pagination,
     PaginationContent,

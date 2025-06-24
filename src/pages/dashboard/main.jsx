@@ -6,7 +6,7 @@ import ProfileCircle from "@/pages/dashboard/components/profile-circle";
 import UserInsights from "@/pages/dashboard/components/user-insights";
 import Users from "@/pages/dashboard/components/users";
 import Verification from "@/pages/dashboard/components/verification";
-import useUserInfoStore from "@/store/use-user-info-store";
+import useUserInfoStore from "@/store/user-info-store";
 import { ChartArea, PanelsTopLeft, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 

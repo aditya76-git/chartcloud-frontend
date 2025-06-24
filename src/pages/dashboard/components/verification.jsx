@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Send, Loader2, Shield } from "lucide-react";
 import api from "@/api/client";
 import useApi from "@/hooks/useApi";
-import useUserInfoStore from "@/store/use-user-info-store";
+import useUserInfoStore from "@/store/user-info-store";
 
 import {
     InputOTP,

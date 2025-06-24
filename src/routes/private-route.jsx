@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import api from '@/api/client';
 import { Loader2 } from 'lucide-react';
-import useUserInfoStore from '@/store/use-user-info-store';
+import useUserInfoStore from '@/store/user-info-store';
 
 export const isAuthenticated = async () => {
   const accessToken = localStorage.getItem('accessToken');

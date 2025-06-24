@@ -1,5 +1,5 @@
 import { formatTime } from "@/lib/utils";
-import useUserInfoStore from "@/store/use-user-info-store";
+import useUserInfoStore from "@/store/user-info-store";
 import { Calendar } from "lucide-react";
 import React from 'react';
 
