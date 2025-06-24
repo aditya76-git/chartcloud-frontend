@@ -8,9 +8,11 @@ import Users from "@/pages/dashboard/components/users";
 import Files from "@/pages/dashboard/components/files";
 import Verification from "@/pages/dashboard/components/verification";
 import Upload from "@/pages/dashboard/components/upload";
+import Charts from "@/pages/dashboard/components/charts";
 import useUserInfoStore from "@/store/user-info-store";
 import { ChartArea, ChartLine, Download, PanelsTopLeft, UploadCloud, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
+
 
 
 const Dashboard = () => {
@@ -72,6 +74,14 @@ const Dashboard = () => {
         type: "block",
         col: 2,
         blocks: [
+
+          {
+            id: "upload",
+            title: "Upload",
+            description: "Upload xlsx file and create charts.",
+            icon: <UploadCloud />,
+            element: <Upload />,
+          },
           {
             id: "files",
             title: "Files",
@@ -80,12 +90,12 @@ const Dashboard = () => {
             element: <Files />,
           },
           {
-            id: "upload",
-            title: "Upload",
-            description: "Upload xlsx file and create charts.",
-            icon: <UploadCloud />,
-            element: <Upload />,
-          }
+            id: "charts",
+            title: "Charts",
+            description: "View saved charts, download in PNG or PDF format",
+            icon: <ChartLine />,
+            element: <Charts />,
+          },
         ],
       }
     ] : [],
@@ -96,7 +106,7 @@ const Dashboard = () => {
 
   return <Explorer master={master}>
 
-   
+
 
     {/* Navigator Slot */}
     <Explorer.Navigator>
@@ -114,8 +124,6 @@ const Dashboard = () => {
             </Explorer.NavigatorMobileOnly>
 
             <Explorer.NavigatorDesktopOnly>
-
-
               <LiveTime />
             </Explorer.NavigatorDesktopOnly>
 
@@ -133,6 +141,7 @@ const Dashboard = () => {
         <Explorer.ViewerLeftNav />
         <Explorer.ViewerRight>
           <div className="flex flex-row gap-2">
+            <Explorer.ToggleFullScreen />
             <ProfileCircle {...userInfo} />
             <ThemeToggle />
           </div>

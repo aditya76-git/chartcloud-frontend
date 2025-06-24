@@ -1,9 +1,11 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
+import { Maximize, Minimize } from "lucide-react";
+import { Toggle } from "@/components/ui/toggle"
 
 const ExplorerContext = createContext();
 export const useExplorer = () => useContext(ExplorerContext);
@@ -14,6 +16,7 @@ const Explorer = ({ master, children }) => {
     const { width } = useWindowSize();
     const isMobileView = width < 768;
     const [selectedBlock, setSelectedBlock] = useState(null);
+    const [fullScreen, setFullScreen] = useState(false)
 
     const showNavigator = !selectedBlock || !isMobileView;
     const showViewer = selectedBlock !== null;
@@ -44,12 +47,12 @@ const Explorer = ({ master, children }) => {
     }
 
     return (
-        <ExplorerContext.Provider value={{ master, selectedBlock, setSelectedBlock, isMobileView }}>
+        <ExplorerContext.Provider value={{ master, selectedBlock, setSelectedBlock, isMobileView, fullScreen, setFullScreen }}>
             <div className="flex h-screen w-full bg-background">
 
-                
 
-                {showNavigator && (
+
+                {!fullScreen && showNavigator && (
                     <div className={clsx(isMobileView ? "w-full" : "w-1/3", "border-r")}>
                         {navigator}
                     </div>
@@ -186,7 +189,7 @@ const ViewerLeft = ({ children }) => {
 };
 
 const ViewerLeftNav = () => {
-    const { selectedBlock, setSelectedBlock } = useExplorer();
+    const { selectedBlock, setSelectedBlock, setFullScreen } = useExplorer();
     if (!selectedBlock) return null;
 
     const { master } = useExplorer();
@@ -217,12 +220,15 @@ const ViewerLeftNav = () => {
         }
     };
 
-
+    const close = () => {
+        setFullScreen(false)
+        setSelectedBlock(null)
+    }
 
 
     return (
         <>
-            <Button variant="ghost" size="icon" onClick={() => setSelectedBlock(null)}>
+            <Button variant="ghost" size="icon" onClick={close}>
                 <X className="h-4 w-4" />
             </Button>
             <Button
@@ -261,7 +267,9 @@ const ViewerRightDesktopOnly = ({ children }) => {
 };
 
 const ViewerHeader = ({ className }) => {
-    const { selectedBlock } = useExplorer();
+    const { selectedBlock, fullScreen } = useExplorer();
+
+    if (fullScreen) return;
 
     return (selectedBlock?.title || selectedBlock?.description) && (
         <>
@@ -278,7 +286,7 @@ const ViewerHeader = ({ className }) => {
 }
 
 const ViewerContent = ({ children }) => {
-    const { selectedBlock } = useExplorer();
+    const { selectedBlock, fullScreen, setFullScreen } = useExplorer();
     return (
         <>
             {/* ViewerHeader */}
@@ -286,7 +294,7 @@ const ViewerContent = ({ children }) => {
 
             <ScrollArea type="always" className="h-[78vh]">
 
-                {React.cloneElement(selectedBlock.element, { meta: selectedBlock })}
+                {React.cloneElement(selectedBlock.element, { meta: selectedBlock, fullScreen, setFullScreen })}
             </ScrollArea>
 
         </>
@@ -297,9 +305,19 @@ const EmptyViewerState = ({ children }) => {
     return children
 };
 
+const ToggleFullScreen = () => {
+    const { fullScreen, setFullScreen, isMobileView } = useExplorer();
+
+    return (
+        <Toggle disabled={isMobileView} aria-label="Toggle fullscreen" onClick={() => setFullScreen(prev => !prev)}>
+            <Maximize className="h-4 w-4" />
+        </Toggle>
+    )
+}
 
 
 Explorer.EmptyViewerState = EmptyViewerState;
+Explorer.ToggleFullScreen = ToggleFullScreen;
 
 Explorer.Navigator = Navigator;
 Explorer.NavigatorHeader = NavigatorHeader;

@@ -18,6 +18,17 @@ export const formatTime = (date, config = null) => {
   return today
 }
 
+
+export const formatFileSize = (kb, decimals = 2) => {
+  if (kb === 0) return '0 KB';
+
+  const sizes = ['KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(kb) / Math.log(1024));
+  const size = kb / Math.pow(1024, i);
+
+  return `${parseFloat(size.toFixed(decimals))} ${sizes[i]}`;
+}
+
 export const timeAgo = (dateString) => {
   const date = new Date(dateString);
   const now = new Date();

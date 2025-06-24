@@ -4,7 +4,7 @@ import api from "@/api/client";
 const useFilesStore = create((set, get) => ({
     filesByPage: {},
     loading: false,
-    sharingLoading : false,
+    sharingLoading: false,
     statsLoading: false,
     error: null,
     pagination: {},
@@ -123,10 +123,13 @@ const useFilesStore = create((set, get) => ({
         }
     },
 
-    fetchStats: async () => {
+    fetchStats: async (refresh = false) => {
         const state = get();
 
-        if (Object.keys(state.stats).length != 0) return
+        if (!refresh) {
+
+            if (Object.keys(state.stats).length != 0) return
+        }
 
         set({ statsLoading: true, error: null });
 

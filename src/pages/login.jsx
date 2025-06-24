@@ -17,8 +17,8 @@ import api from '@/api/client';
 import useApi from '@/hooks/useApi';
 
 const Login = () => {
-  const [username, setUsername] = useState("test1231");
-  const [password, setPassword] = useState("adityaraj7612");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const { loading, request } = useApi();
   const { loading: googleLoading, request: googleRequest } = useApi();
@@ -106,6 +106,7 @@ const Login = () => {
                     type="password"
                     required
                     value={password}
+                    autoComplete="off"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>

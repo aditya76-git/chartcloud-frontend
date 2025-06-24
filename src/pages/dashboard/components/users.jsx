@@ -39,7 +39,7 @@ import {
 
 import clsx from "clsx"
 
-const Users = () => {
+const Users = ({ fullScreen }) => {
     const { usersByPage, loading, error, pagination, deleteUser, getUsers } = useUsersStore();
     const [currentPage, setCurrentPage] = useState(1);
     const { resetStats, getStats } = useUserStatsStore();
@@ -51,11 +51,8 @@ const Users = () => {
 
     useEffect(() => {
         request(() => getUsers(currentPage))
+        setSelectedUser(users[0] ?? {})
 
-        // if (users) {
-
-        //     setSelectedUser(users[0] ?? {})
-        // }
     }, [currentPage]);
 
     const prevDisabled = currentPage == 1
@@ -71,7 +68,7 @@ const Users = () => {
 
 
     return (
-        <div className="flex flex-col md:flex-row">
+        <div className={clsx("flex flex-col md:flex-row", fullScreen && "mt-8 px-40")}>
             <div className="w-full md:w-[50%] p-4">
                 <div className="flex flex-row items-center justify-center gap-2 text-md font-medium mb-4">
                     <p className="font-medium">Users</p>

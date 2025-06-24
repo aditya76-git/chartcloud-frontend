@@ -21,6 +21,7 @@ import useUserStatsStore from "@/store/user-stats-store";
 import { ChartPie, Loader2, User } from "lucide-react";
 import { useEffect } from "react";
 import { Pie, PieChart } from "recharts";
+import clsx from "clsx";
 
 const chartConfig = {
   visitors: {
@@ -40,7 +41,7 @@ const chartConfig = {
   },
 };
 
-const UserInsights = () => {
+const UserInsights = ({fullScreen}) => {
   const { stats, loading, getStats } = useUserStatsStore();
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const UserInsights = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className={clsx("flex flex-col md:flex-row", fullScreen && "mt-8 px-40")}>
 
       <div className="md:w-1/2 w-full p-4">
 
