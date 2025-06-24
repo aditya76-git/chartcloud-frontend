@@ -77,53 +77,55 @@ const Users = () => {
                     <p className="font-medium">Users</p>
                     <UsersRound className="h-4 w-4" />
                 </div>
-
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Username</TableHead>
-                            <TableHead className="text-right">Email</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-
-                        {loading ? Array.from({ length: nextDisabled ? Math.floor(totalItems / totalPages) : 5 }).map((_, index) => (
-                            <TableRow key={index}>
-                                <TableCell>
-                                    <Skeleton className="h-5 w-32" />
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <Skeleton className="h-5 w-48 ml-auto" />
-                                </TableCell>
+                <div className="rounded-md border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Username</TableHead>
+                                <TableHead className="text-right">Email</TableHead>
                             </TableRow>
-                        )) : users.map((item) => (
-                            <TableRow onClick={() => setSelectedUser(item)} key={item._id}>
-                                <TableCell
-                                    className={clsx(
-                                        "font-medium cursor-pointer",
+                        </TableHeader>
+                        <TableBody>
+
+                            {loading ? Array.from({ length: nextDisabled ? Math.floor(totalItems / totalPages) : 5 }).map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Skeleton className="h-5 w-32" />
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <Skeleton className="h-5 w-48 ml-auto" />
+                                    </TableCell>
+                                </TableRow>
+                            )) : users.map((item) => (
+                                <TableRow onClick={() => setSelectedUser(item)} key={item._id}>
+                                    <TableCell
+                                        className={clsx(
+                                            "font-medium cursor-pointer",
+                                            selectedUser?._id === item._id && "bg-muted/50"
+                                        )}
+                                    >
+                                        {item.username}
+                                    </TableCell>
+
+                                    <TableCell className={clsx(
+                                        "text-right cursor-pointer",
                                         selectedUser?._id === item._id && "bg-muted/50"
-                                    )}
-                                >
-                                    {item.username}
+                                    )}>{item.email}</TableCell>
+                                </TableRow>
+                            ))}
+
+                        </TableBody>
+                        <TableFooter className="mt-4">
+                            <TableRow>
+                                <TableCell className="font-semibold">Total</TableCell>
+                                <TableCell className="text-right font-semibold">
+                                    Current : {users.length} / Total : {totalItems}
                                 </TableCell>
-
-                                <TableCell className={clsx(
-                                    "text-right cursor-pointer",
-                                    selectedUser?._id === item._id && "bg-muted/50"
-                                )}>{item.email}</TableCell>
                             </TableRow>
-                        ))}
+                        </TableFooter>
+                    </Table>
 
-                    </TableBody>
-                    <TableFooter className="mt-4">
-                        <TableRow>
-                            <TableCell className="font-semibold">Total</TableCell>
-                            <TableCell className="text-right font-semibold">
-                                Current : {users.length} / Total : {totalItems}
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter>
-                </Table>
+                </div>
 
                 <Pagination className="mt-4">
                     <PaginationContent>

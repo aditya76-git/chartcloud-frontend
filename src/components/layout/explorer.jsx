@@ -46,6 +46,9 @@ const Explorer = ({ master, children }) => {
     return (
         <ExplorerContext.Provider value={{ master, selectedBlock, setSelectedBlock, isMobileView }}>
             <div className="flex h-screen w-full bg-background">
+
+                
+
                 {showNavigator && (
                     <div className={clsx(isMobileView ? "w-full" : "w-1/3", "border-r")}>
                         {navigator}

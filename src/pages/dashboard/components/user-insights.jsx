@@ -98,54 +98,63 @@ const UserInsights = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {/* Left: User Stats */}
+
       <div className="md:w-1/2 w-full p-4">
-        <div className="flex flex-row items-center justify-center gap-2 text-md font-medium mb-4">
+
+
+        <div className="flex flex-row items-center justify-start gap-2 text-md font-medium mb-4 ml-2">
           <p className="font-medium">User Stats</p>
           <User className="h-4 w-4" />
         </div>
 
-        <Table>
-          <TableCaption>A breakdown of all user status.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Count</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
 
-            {loading ? Array.from({ length: 5 }).map((_, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <Skeleton className="h-5 w-32" />
-                </TableCell>
-                <TableCell className="text-right">
-                  <Skeleton className="h-5 w-48 ml-auto" />
+        <div className="rounded-md border">
+
+          <Table>
+            <TableCaption className="mb-4">A breakdown of all user status.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Count</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+
+              {loading ? Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton className="h-5 w-32" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="h-5 w-48 ml-auto" />
+                  </TableCell>
+                </TableRow>
+              )) : userStats.map((item) => (
+                <TableRow key={item.label}>
+                  <TableCell className="font-medium">{item.label}</TableCell>
+                  <TableCell className="text-right">{item.count}</TableCell>
+                </TableRow>
+              ))
+              }
+
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell className="font-semibold">Total</TableCell>
+                <TableCell className="text-right font-semibold">
+                  {stats?.total}
                 </TableCell>
               </TableRow>
-            )) : userStats.map((item) => (
-              <TableRow key={item.label}>
-                <TableCell className="font-medium">{item.label}</TableCell>
-                <TableCell className="text-right">{item.count}</TableCell>
-              </TableRow>
-            ))
-            }
+            </TableFooter>
+          </Table>
 
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell className="font-semibold">Total</TableCell>
-              <TableCell className="text-right font-semibold">
-                {stats?.total}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+        </div>
       </div>
 
-      {/* Right: Login Method Chart */}
       <div className="md:w-1/2 w-full p-4">
+
+              
+
         <div className="flex flex-row items-center justify-center gap-2 text-md font-medium mb-4">
           <p className="font-medium">Login Method Distribution</p>
           <ChartPie className="h-4 w-4" />

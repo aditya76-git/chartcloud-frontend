@@ -7,8 +7,8 @@ export function cn(...inputs) {
 }
 
 
-export const formatTime = (date) => {
-  const today = date.toLocaleDateString(undefined, {
+export const formatTime = (date, config = null) => {
+  const today = date.toLocaleDateString(undefined, config ? config : {
     weekday: "long",
     year: "numeric",
     month: "long",

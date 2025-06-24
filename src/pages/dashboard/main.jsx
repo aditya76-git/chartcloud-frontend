@@ -5,9 +5,11 @@ import LiveTime from "@/pages/dashboard/components/live-time";
 import ProfileCircle from "@/pages/dashboard/components/profile-circle";
 import UserInsights from "@/pages/dashboard/components/user-insights";
 import Users from "@/pages/dashboard/components/users";
+import Files from "@/pages/dashboard/components/files";
 import Verification from "@/pages/dashboard/components/verification";
+import Upload from "@/pages/dashboard/components/upload";
 import useUserInfoStore from "@/store/user-info-store";
-import { ChartArea, PanelsTopLeft, UsersRound } from "lucide-react";
+import { ChartArea, ChartLine, Download, PanelsTopLeft, UploadCloud, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 
 
@@ -65,27 +67,25 @@ const Dashboard = () => {
     ...(userInfo?.verified) ? [
       {
         id: "blocks",
-        title: "Blocks",
-        description: "Click on block to manage them.",
+        title: "User Dashboard",
+        description: "Central hub to manage all file uploaded, charts made.",
         type: "block",
         col: 2,
         blocks: [
           {
             id: "files",
             title: "Files",
-            description: "Check all the files uploaded",
+            description: "Track all the files uploaded, view or delete them",
             icon: <PanelsTopLeft />,
-            header: "+1",
-            element: <UserBlock />,
+            element: <Files />,
           },
           {
-            id: "charts",
-            title: "Charts",
-            description: "Check all the chart generated",
-            icon: <PanelsTopLeft />,
-            header: "100",
-            element: <SettingsBlock />,
-          },
+            id: "upload",
+            title: "Upload",
+            description: "Upload xlsx file and create charts.",
+            icon: <UploadCloud />,
+            element: <Upload />,
+          }
         ],
       }
     ] : [],
