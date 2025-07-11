@@ -37,7 +37,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
     const [yAxis, setYAxis] = useState();
     const [chartType, setChartType] = useState(null);
     const [chartSubType, setChartSubType] = useState("");
-    const { uploadFile, loading, saveChart, getCharts, getFiles } = useDashboardStore();
+    const { uploadFile, loading, saveChart, getCharts, getFiles, getUserFilesStats } = useDashboardStore();
 
     const { request } = useApi();
     const [parsedData, setParsedData] = useState([]);
@@ -272,6 +272,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
             setFileId(result?.file?._id)
 
             await getFiles(1, 5, true)
+            await getUserFilesStats(true)
 
         }
     };
@@ -741,9 +742,6 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                                     <DialogHeader className="flex justify-between items-start">
                                         <div>
                                             <DialogTitle>Chart Preview</DialogTitle>
-                                            {JSON.stringify(generateChartConfig())}
-                                            {JSON.stringify(generateChartData())}
-
                                             <DialogDescription>
                                                 {filename}
                                             </DialogDescription>
