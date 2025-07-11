@@ -18,6 +18,20 @@ export const formatTime = (date, config = null) => {
   return today
 }
 
+export const toCamelCase = (text) => {
+  if (typeof text !== 'string') return text;
+
+  return text
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
+}
+
+export const camelToLabel = (camelCase) => {
+  return camelCase
+    .replace(/([A-Z])/g, ' $1')     // Add space before capital letters
+    .replace(/^./, str => str.toUpperCase()); // Capitalize first letter
+}
+
 
 export const formatFileSize = (kb, decimals = 2) => {
   if (kb === 0) return '0 KB';

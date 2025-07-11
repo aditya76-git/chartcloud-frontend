@@ -291,8 +291,7 @@ const ViewerContent = ({ children }) => {
         <>
             {/* ViewerHeader */}
             {children}
-
-            <ScrollArea type="always" className="h-[78vh]">
+            <ScrollArea type="always" className="h-[91vh]">
 
                 {React.cloneElement(selectedBlock.element, { meta: selectedBlock, fullScreen, setFullScreen })}
             </ScrollArea>

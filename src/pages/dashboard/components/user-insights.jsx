@@ -1,11 +1,11 @@
 import {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
-  ChartLegendContent
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent
 } from "@/components/ui/chart";
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   Table,
@@ -17,11 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useUserStatsStore from "@/store/user-stats-store";
-import { ChartPie, Loader2, User } from "lucide-react";
+import useDashboardStore from "@/store/dashboard-store";
+import clsx from "clsx";
+import { ChartPie, User } from "lucide-react";
 import { useEffect } from "react";
 import { Pie, PieChart } from "recharts";
-import clsx from "clsx";
 
 const chartConfig = {
   visitors: {
@@ -42,13 +42,13 @@ const chartConfig = {
 };
 
 const UserInsights = ({fullScreen}) => {
-  const { stats, loading, getStats } = useUserStatsStore();
+  const { userStats, loading, getUserStats } = useDashboardStore();
 
   useEffect(() => {
-    getStats();
+    getUserStats();
   }, []);
 
-  // if (loading || !stats) {
+  // if (loading.userStats || !stats) {
   //   return (
   //     <div className="flex justify-center items-center h-[300px]">
   //       <Loader2 className="animate-spin h-8 w-8" />
@@ -56,43 +56,43 @@ const UserInsights = ({fullScreen}) => {
   //   );
   // }
 
-  const userStats = [
+  const userStatsList = [
     {
       label: "Verified Users",
-      count: stats?.verified,
+      count: userStats?.verified,
     },
     {
       label: "Unverified Users",
-      count: stats?.unverified,
+      count: userStats?.unverified,
     },
     {
       label: "Email Login",
-      count: stats?.email,
+      count: userStats?.email,
     },
     {
       label: "Google Login",
-      count: stats?.google,
+      count: userStats?.google,
     },
     {
       label: "Github Login",
-      count: stats?.github,
+      count: userStats?.github,
     },
   ];
 
   const loginChartData = [
     {
       accountType: "email",
-      visitors: stats?.email,
+      visitors: userStats?.email,
       fill: "var(--chart-3)",
     },
     {
       accountType: "github",
-      visitors: stats?.github,
+      visitors: userStats?.github,
       fill: "var(--chart-2)",
     },
     {
       accountType: "google",
-      visitors: stats?.google,
+      visitors: userStats?.google,
       fill: "var(--chart-1)",
     },
   ];
@@ -121,7 +121,7 @@ const UserInsights = ({fullScreen}) => {
             </TableHeader>
             <TableBody>
 
-              {loading ? Array.from({ length: 5 }).map((_, index) => (
+              {loading.userStats ? Array.from({ length: 5 }).map((_, index) => (
                 <TableRow key={index}>
                   <TableCell>
                     <Skeleton className="h-5 w-32" />
@@ -130,7 +130,7 @@ const UserInsights = ({fullScreen}) => {
                     <Skeleton className="h-5 w-48 ml-auto" />
                   </TableCell>
                 </TableRow>
-              )) : userStats.map((item) => (
+              )) : userStatsList.map((item) => (
                 <TableRow key={item.label}>
                   <TableCell className="font-medium">{item.label}</TableCell>
                   <TableCell className="text-right">{item.count}</TableCell>
@@ -143,7 +143,7 @@ const UserInsights = ({fullScreen}) => {
               <TableRow>
                 <TableCell className="font-semibold">Total</TableCell>
                 <TableCell className="text-right font-semibold">
-                  {stats?.total}
+                  {userStats?.total}
                 </TableCell>
               </TableRow>
             </TableFooter>
@@ -164,7 +164,7 @@ const UserInsights = ({fullScreen}) => {
 
 
 
-        {loading ? <div className="flex flex-col items-center justify-center gap-6 mt-6">
+        {loading.userStats ? <div className="flex flex-col items-center justify-center gap-6 mt-6">
           <Skeleton className="h-[180px] w-[180px] rounded-full" />
           <div className="flex flex-row gap-3 mt-2">
             <Skeleton className="h-4 w-14 rounded-sm" />

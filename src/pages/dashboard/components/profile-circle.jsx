@@ -14,10 +14,12 @@ import api from "@/api/client";
 import useApi from "@/hooks/useApi";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import useUserInfoStore from "@/store/user-info-store";
 
 const ProfileCircle = ({ username, email, createdAt, profilePicture }) => {
     const { loading, request } = useApi();
     const navigate = useNavigate();
+    const { clearUserInfo } = useUserInfoStore()
 
     const handleLogout = async () => {
         const result = await request(
@@ -25,6 +27,7 @@ const ProfileCircle = ({ username, email, createdAt, profilePicture }) => {
         );
 
         if (result?.success) {
+            clearUserInfo()
             navigate("/");
         }
     };
