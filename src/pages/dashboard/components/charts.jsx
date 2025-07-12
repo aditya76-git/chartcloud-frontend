@@ -5,16 +5,16 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import html2canvas from "html2canvas";
 import {
-    Card
+    Card, CardDescription, CardHeader, CardTitle
 } from "@/components/ui/card";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import { File, FileText, Trash2, ChartLine, Download, Loader2 } from 'lucide-react';
+import { File, FileText, Trash2, ChartLine, Download, Loader2, Columns2, Rows2, FileDigit, Archive } from 'lucide-react';
 
 import useDashboardStore from "@/store/dashboard-store";
 import useApi from "@/hooks/useApi";
 import clsx from "clsx";
-import { formatTime, camelToLabel } from "@/lib/utils";
+import { formatTime, camelToLabel, formatFileSize } from "@/lib/utils";
 import {
     Dialog,
     DialogContent,
@@ -25,16 +25,22 @@ import {
     DialogFooter
 } from "@/components/ui/dialog";
 import { ChartElementMapping } from '@/pages/dashboard/charts/config';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Charts = ({ fullScreen }) => {
+
+    const { fileId } = useParams()
     const {
-        getFileById,
         byPage,
         getCharts,
         deleteChart,
         pagination,
-        loading
+        loading,
+        error,
+        response
     } = useDashboardStore();
+    const location = useLocation();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedChart, setSelectedChart] = useState({});
@@ -42,11 +48,19 @@ const Charts = ({ fullScreen }) => {
     const printRef = useRef(null);
 
     const charts = byPage.charts[currentPage] || [];
-    const { total = 0, totalPages = 1 } = pagination.charts || {};
+    const { total, totalPages = 1 } = pagination.charts || {};
+
+    const isValidObjectId = (id) => {
+        return /^[a-fA-F0-9]{24}$/.test(id);
+    };
+
 
     useEffect(() => {
-        request(() => getCharts(currentPage));
+        if (isValidObjectId(fileId) || location.pathname === "/dashboard") {
+            request(() => getCharts(currentPage, 5, false, fileId));
+        }
     }, [currentPage]);
+
 
     useEffect(() => {
         if (charts.length === 0) return;
@@ -100,8 +114,75 @@ const Charts = ({ fullScreen }) => {
         }
     };
 
+
+    if (error || (fileId && !isValidObjectId(fileId))) {
+        return <div class="flex items-center min-h-screen px-4 py-12 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+            <div class="w-full space-y-6 text-center">
+                <div class="space-y-3">
+                    <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl">Oops! Lost in Cyberspace</h1>
+                    <p class="text-gray-500">The file is either private or not avaialble</p>
+                </div>
+                <div class="space-x-4">
+                    <a href="https://chartcloud.pages.dev" class="inline-flex h-10 items-center rounded-md bg-gray-900 px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300" target="_blank" rel="noopener noreferrer">Home</a>
+                </div>
+            </div>
+        </div>
+    }
+
     return (
-        <div className={fullScreen ? "mt-8 px-40" : ""}>
+        <div className={clsx(fullScreen && "md: mt-8 md:px-40")}>
+
+
+
+            {fileId && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+                    {loading.charts ? (
+                        Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="w-full shadow-sm hover:shadow-md transition-all relative p-4 rounded-md border">
+                                <Skeleton className="absolute top-5 right-5 h-6 w-6 text-muted-foreground" />
+                                <div className="space-y-2 mt-6">
+                                    <Skeleton className="h-4 w-2/3" />
+                                    <Skeleton className="h-6 w-1/2" />
+                                </div>
+                            </div>
+                        ))
+                    ) : <>
+                        <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
+                            <Rows2 className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
+                            <CardHeader className="space-y-1">
+                                <CardDescription className="text-muted-foreground">Rows</CardDescription>
+                                <CardTitle className="text-lg font-semibold">{response?.file?.rows}</CardTitle>
+                            </CardHeader>
+                        </Card>
+
+                        <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
+                            <Columns2 className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
+                            <CardHeader className="space-y-1">
+                                <CardDescription className="text-muted-foreground">Columns</CardDescription>
+                                <CardTitle className="text-lg font-semibold">{response?.file?.columns}</CardTitle>
+                            </CardHeader>
+                        </Card>
+
+                        <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
+                            <FileDigit className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
+                            <CardHeader className="space-y-1">
+                                <CardDescription className="text-muted-foreground">Charts Count</CardDescription>
+                                <CardTitle className="text-lg font-semibold">{total}</CardTitle>
+                            </CardHeader>
+                        </Card>
+
+                        <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
+                            <Archive className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
+                            <CardHeader className="space-y-1">
+                                <CardDescription className="text-muted-foreground">File Size</CardDescription>
+                                <CardTitle className="text-lg font-semibold">{formatFileSize(response?.file?.fileSize)}</CardTitle>
+                            </CardHeader>
+                        </Card>
+                    </>}
+                </div>
+
+            )}
+
             <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-[50%] p-4">
                     <div className="flex flex-row items-center gap-2 text-md font-medium mb-4 ml-2">
@@ -206,7 +287,7 @@ const Charts = ({ fullScreen }) => {
                                     <div className="flex flex-col sm:flex-row justify-between gap-4">
                                         <div className="flex flex-col">
                                             <h2 className="text-md font-bold break-all">{selectedChart.name}</h2>
-                                            <p className="text-md text-muted-foreground">{selectedChart._id}</p>
+                                            <p className="text-md text-muted-foreground">{response?.file?.filename}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -252,7 +333,7 @@ const Charts = ({ fullScreen }) => {
                                         </Dialog>
                                     </div>
 
-                                    <div>
+                                    {!fileId && <div>
                                         <Dialog>
                                             <DialogTrigger asChild>
                                                 <Button variant="destructive">
@@ -267,11 +348,11 @@ const Charts = ({ fullScreen }) => {
                                                     </DialogDescription>
                                                 </DialogHeader>
                                                 <DialogFooter>
-                                                    <Button variant="success" disabled={loading.chartDelete} onClick={handleDelete}>{loading.chartDelete && <Loader2 className = "animate-spin"/>}Confirm</Button>
+                                                    <Button variant="success" disabled={loading.chartDelete} onClick={handleDelete}>{loading.chartDelete && <Loader2 className="animate-spin" />}Confirm</Button>
                                                 </DialogFooter>
                                             </DialogContent>
                                         </Dialog>
-                                    </div>
+                                    </div>}
                                 </div>
                             </div>
                         </Card>

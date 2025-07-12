@@ -19,9 +19,13 @@ import useDashboardStore from "@/store/dashboard-store";
 import useApi from "@/hooks/useApi";
 import { formatFileSize, formatTime } from "@/lib/utils";
 import clsx from "clsx";
-import { Archive, File, FileKey, FileKey2, FileText, Loader2, Share2, Trash2 } from 'lucide-react';
+import { Archive, Copy, Check, File, FileKey, FileKey2, FileText, Loader2, Share2, Trash2, Eye, Plus } from 'lucide-react';
 import Upload from '@/pages/dashboard/components/upload';
-import useUserInfoStore from '../../../store/user-info-store';
+import useUserInfoStore from '@/store/user-info-store';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner";
+
 
 const Files = ({ fullScreen }) => {
     const {
@@ -44,6 +48,7 @@ const Files = ({ fullScreen }) => {
     const files = byPage.files[currentPage] || [];
     const currentFile = getFileById(selectedFile._id);
     const { total = 0, totalPages = 1 } = pagination.files || {};
+    const [isCopied, setIsCopied] = useState(false);
 
 
     useEffect(
@@ -77,6 +82,7 @@ const Files = ({ fullScreen }) => {
 
     const toggleSharingStatus = async () => {
         await request(() => toggleSharing(currentFile._id, !currentFile?.sharing));
+
         await request(() => getUserFilesStats(true));
     };
 
@@ -88,6 +94,8 @@ const Files = ({ fullScreen }) => {
         };
         setDefaultParsedFile(file)
     };
+
+
 
     const SpreadSheet = ({ data = [] }) => {
         if (!data.length) return null;
@@ -109,6 +117,20 @@ const Files = ({ fullScreen }) => {
             </Table>
         );
     };
+
+    const copyUrl = (url) => {
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                setIsCopied(true);
+                setTimeout(() => {
+                    setIsCopied(false);
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error('Failed to copy URL: ', err);
+            });
+    };
+
 
 
     if (defaultParsedFile) {
@@ -309,7 +331,7 @@ const Files = ({ fullScreen }) => {
                                         <div className="mt-2">
                                             <Dialog>
                                                 <DialogTrigger asChild>
-                                                    <Button variant="secondary">View Spreadsheet</Button>
+                                                    <Button variant="secondary"><Eye />View Spreadsheet</Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="sm:max-w-[800px]">
                                                     <DialogHeader>
@@ -331,8 +353,15 @@ const Files = ({ fullScreen }) => {
                                         </div>
 
                                         <div>
-                                            <Button variant="success" onClick={createChart}>Create charts</Button>
+                                            <Button variant="success" onClick={createChart}><Plus /> Create charts</Button>
                                         </div>
+
+
+                                        {currentFile?.sharing && <div>
+                                            <Button variant="secondary" onClick={() => copyUrl(`${window.location.origin}/file/${selectedFile?._id}`)}> {isCopied ? <Check /> : <Copy />} Copy Link</Button>
+                                        </div>}
+
+
                                     </div>
                                 </div>
                             </Card>

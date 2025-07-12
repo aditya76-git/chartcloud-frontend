@@ -81,8 +81,16 @@ api.interceptors.request.use(async (config) => {
         return config
     }
 
-    const noTokenRoutes = ["/auth/signup", "/auth/login", "/auth/login/google/callback", "/auth/login/github/callback"];
-    const needsAuth = !noTokenRoutes.some(route => url.includes(route));
+    const noTokenRoutes = [
+        /^\/auth\/signup$/,
+        /^\/auth\/login$/,
+        /^\/auth\/login\/google\/callback$/,
+        /^\/auth\/login\/github\/callback$/,
+        /^\/user\/files\/[^\/]+\/charts(?:\?[^\/]*)?$/,
+    ];
+
+    const needsAuth = !noTokenRoutes.some(pattern => pattern.test(url));
+    console.log(url)
 
     if (needsAuth) {
         const accessToken = await getValidAccessToken()

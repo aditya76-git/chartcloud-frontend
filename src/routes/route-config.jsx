@@ -4,8 +4,12 @@ import Login from "@/pages/login";
 import Signup from "@/pages/signup";
 import Google from "@/pages/callback/google";
 import Github from "@/pages/callback/github";
+import Charts from "@/pages/dashboard/components/charts";
 
 // Here isPrivate mean auth users can only access, checks the localstorage for accessToken, refreshToken and expiry
+
+
+
 const RouteConfig = [
     {
         path: '/',
@@ -36,6 +40,10 @@ const RouteConfig = [
         path: '/callback/github',
         element: <Github />,
         isPrivate: false
+    },
+    {
+        path: '/file/:fileId',
+        element: <Charts fullScreen = {true} />,
     },
 ]
 

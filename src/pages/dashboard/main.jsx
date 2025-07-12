@@ -120,7 +120,7 @@ const Dashboard = () => {
         <Explorer.NavigatorHeader>
           <Explorer.NavigatorLeft>
             <h1 className="text-md font-bold p-3 cursor-pointer">
-              <Link to="/">chartcloud</Link>
+              <Link to="/">chartcloud 📊</Link>
             </h1>
           </Explorer.NavigatorLeft>
           <Explorer.NavigatorRight>

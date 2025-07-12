@@ -26,6 +26,7 @@ const useDashboardStore = create((set, get) => ({
     users: false
   },
   error: null,
+  response: null,
   userFilesStats: {},
   userStats: {},
   setLoading: (key, value) => {
@@ -203,18 +204,18 @@ const useDashboardStore = create((set, get) => ({
 
   getUserStats: async () => {
     const state = get();
-  
+
     if (Object.keys(state.userStats || {}).length !== 0) {
       return;
     }
-  
+
     get().setLoading("userStats", true);
     set({ error: null });
-  
+
     try {
       const response = await api.get("/admin/users/stats");
       const result = response?.data;
-  
+
       if (result?.success && result?.count) {
         set({ userStats: result.count });
       } else {
@@ -226,12 +227,12 @@ const useDashboardStore = create((set, get) => ({
       get().setLoading("userStats", false);
     }
   },
-  
+
   resetUserStats: () => {
     set({ userStats: {}, error: null });
     get().setLoading("userStats", false);
   },
-  
+
   getUserFilesStats: async (refresh = false) => {
     const state = get();
     if (!refresh && Object.keys(state.userFilesStats).length !== 0) return;
@@ -291,15 +292,21 @@ const useDashboardStore = create((set, get) => ({
     }
   },
 
-  getCharts: async (page = 1, limit = 5, refresh = false) => {
+  getCharts: async (page = 1, limit = 5, refresh = false, fileId = null) => {
     const state = get();
     if (!refresh && state.byPage.charts[page]) return;
 
     get().setLoading("charts", true);
     set({ error: null });
-
+    let response;
     try {
-      const response = await api.get(`/user/charts?page=${page}&limit=${limit}`);
+      if (fileId) {
+        response = await api.get(`/user/files/${fileId}/charts?page=${page}&limit=${limit}`);
+      }
+      else {
+        response = await api.get(`/user/charts?page=${page}&limit=${limit}`);
+      }
+
       const result = response?.data;
 
       if (result?.success) {
@@ -315,7 +322,9 @@ const useDashboardStore = create((set, get) => ({
             ...state.pagination,
             charts: result.pagination,
           },
+          response: result
         });
+
       } else {
         get().setError(result?.message || "Failed to fetch charts");
       }
