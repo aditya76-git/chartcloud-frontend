@@ -24,10 +24,11 @@ import {
     User,
     UsersRound
 } from "lucide-react";
-
+import translations from "@/lib/translations";
 import useApi from "@/hooks/useApi";
 import { formatTime } from "@/lib/utils";
 import useDashboardStore from "@/store/dashboard-store";
+import useUserInfoStore from "@/store/user-info-store";
 
 const Users = ({ fullScreen }) => {
     const {
@@ -39,6 +40,8 @@ const Users = ({ fullScreen }) => {
         deleteUser,
         resetUserStats, getUserStats
     } = useDashboardStore();
+
+    const { language } = useUserInfoStore()
 
     const [currentPage, setCurrentPage] = useState(1);
     const users = byPage.users?.[currentPage] || [];
@@ -74,7 +77,7 @@ const Users = ({ fullScreen }) => {
             {/* Users Table */}
             <div className="w-full md:w-[50%] p-4">
                 <div className="flex items-center gap-2 text-md font-medium mb-4">
-                    <p>Users</p>
+                    <p>{translations?.users?.header?.left[language]}</p>
                     <UsersRound className="h-4 w-4" />
                 </div>
 
@@ -82,8 +85,8 @@ const Users = ({ fullScreen }) => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Username</TableHead>
-                                <TableHead className="text-right">Email</TableHead>
+                                <TableHead>{translations?.users?.text?.username[language]}</TableHead>
+                                <TableHead className="text-right">{translations?.users?.text?.email[language]}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -111,9 +114,9 @@ const Users = ({ fullScreen }) => {
                         </TableBody>
                         <TableFooter>
                             <TableRow>
-                                <TableCell className="font-semibold">Total</TableCell>
+                                <TableCell className="font-semibold">{translations?.text?.total[language]}</TableCell>
                                 <TableCell className="text-right font-semibold">
-                                    Current: {users.length} / Total: {total}
+                                    {translations?.text?.current[language]}: {users.length} / {translations?.text?.total[language]}: {total}
                                 </TableCell>
                             </TableRow>
                         </TableFooter>
@@ -157,7 +160,7 @@ const Users = ({ fullScreen }) => {
             {/* User Info Card */}
             <div className="w-full md:w-[50%] p-4">
                 <div className="flex items-center gap-2 text-md font-medium mb-4">
-                    <p>User Info</p>
+                    <p>{translations?.users?.header?.right[language]}</p>
                     <User className="h-4 w-4" />
                 </div>
 
@@ -217,21 +220,21 @@ const Users = ({ fullScreen }) => {
                                 <div className="flex items-center gap-2">
                                     {selectedUser.verified ? <Shield className="w-5 h-5" /> : <ShieldOff className="w-5 h-5" />}
                                     <div>
-                                        <p className="text-muted-foreground">Verified</p>
+                                        <p className="text-muted-foreground">{translations?.users?.text?.verified[language]}</p>
                                         <p>{selectedUser.verified ? "Yes" : "No"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CircleUser className="w-5 h-5" />
                                     <div>
-                                        <p className="text-muted-foreground">Login Method</p>
+                                        <p className="text-muted-foreground">{translations?.users?.text?.method[language]}</p>
                                         <p>{selectedUser.accountType?.toUpperCase() || "EMAIL"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <ShieldUser className="w-5 h-5" />
                                     <div>
-                                        <p className="text-muted-foreground">Role</p>
+                                        <p className="text-muted-foreground">{translations?.users?.text?.role[language]}</p>
                                         <p>{selectedUser.role?.toUpperCase() || "USER"}</p>
                                     </div>
                                 </div>

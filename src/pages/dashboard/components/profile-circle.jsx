@@ -12,14 +12,15 @@ import { timeAgo } from '@/lib/utils';
 import { Button } from "@/components/ui/button";
 import api from "@/api/client";
 import useApi from "@/hooks/useApi";
-import { Loader2 } from "lucide-react";
+import { Languages, Loader2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import useUserInfoStore from "@/store/user-info-store";
+import translations from "@/lib/translations";
 
 const ProfileCircle = ({ username, email, createdAt, profilePicture }) => {
     const { loading, request } = useApi();
     const navigate = useNavigate();
-    const { clearUserInfo } = useUserInfoStore()
+    const { clearUserInfo, language } = useUserInfoStore()
 
     const handleLogout = async () => {
         const result = await request(
@@ -32,6 +33,10 @@ const ProfileCircle = ({ username, email, createdAt, profilePicture }) => {
         }
     };
 
+    const { value, unit } = timeAgo(createdAt);
+
+    console.log(language)
+    console.log(translations?.text?.timeAgo[unit][language])
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -56,9 +61,9 @@ const ProfileCircle = ({ username, email, createdAt, profilePicture }) => {
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Joined {timeAgo(createdAt)}</DropdownMenuItem>
+                <DropdownMenuItem>{translations?.text?.joined[language]} {value} {translations?.text?.timeAgo[unit][language]}</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
-                    Log out {loading && <Loader2 className="ml-auto h-4 w-4 animate-spin" />}
+                    {translations?.text?.logout[language]} {loading && <Loader2 className="ml-auto h-4 w-4 animate-spin" />}
                     <DropdownMenuShortcut>⇧ + Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>

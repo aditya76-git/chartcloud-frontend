@@ -16,7 +16,23 @@ const Explorer = ({ master, children }) => {
     const { width } = useWindowSize();
     const isMobileView = width < 768;
     const [selectedBlock, setSelectedBlock] = useState(null);
-    const [fullScreen, setFullScreen] = useState(false)
+    const [fullScreen, setFullScreen] = useState(false);
+
+    useEffect(() => {
+        if (selectedBlock && master) {
+            const allBlocks = master
+                .filter(item => item.type === "block")
+                .flatMap(item => item.blocks || []);
+
+            const updatedBlock = allBlocks.find(block => block.id === selectedBlock.id);
+
+            if (updatedBlock) {
+                setSelectedBlock(updatedBlock);
+            } else {
+                setSelectedBlock(null);
+            }
+        }
+    }, [master]);
 
     const showNavigator = !selectedBlock || !isMobileView;
     const showViewer = selectedBlock !== null;
@@ -50,8 +66,6 @@ const Explorer = ({ master, children }) => {
         <ExplorerContext.Provider value={{ master, selectedBlock, setSelectedBlock, isMobileView, fullScreen, setFullScreen }}>
             <div className="flex h-screen w-full bg-background">
 
-
-
                 {!fullScreen && showNavigator && (
                     <div className={clsx(isMobileView ? "w-full" : "w-1/3", "border-r")}>
                         {navigator}
@@ -69,7 +83,6 @@ const Explorer = ({ master, children }) => {
         </ExplorerContext.Provider>
     );
 };
-
 
 export default Explorer;
 
@@ -129,7 +142,6 @@ const NavigatorSection = ({ data }) => {
         </div>
     );
 };
-
 
 const NavigatorBlockGroup = ({ data }) => {
     const { setSelectedBlock, selectedBlock } = useExplorer();
@@ -200,19 +212,16 @@ const ViewerLeftNav = () => {
         (item) => item.blocks ?? []
     );
 
-
     const currentIndex = allBlocks.findIndex((block) => block.id === selectedBlock.id);
 
     const isPrevDisabled = currentIndex <= 0;
     const isNextDisabled = currentIndex >= allBlocks.length - 1;
-
 
     const goToPrev = () => {
         if (!isPrevDisabled) {
             setSelectedBlock(allBlocks[currentIndex - 1]);
         }
     };
-
 
     const goToNext = () => {
         if (!isNextDisabled) {
@@ -224,7 +233,6 @@ const ViewerLeftNav = () => {
         setFullScreen(false)
         setSelectedBlock(null)
     }
-
 
     return (
         <>
@@ -292,10 +300,8 @@ const ViewerContent = ({ children }) => {
             {/* ViewerHeader */}
             {children}
             <ScrollArea type="always" className="h-[91vh]">
-
-                {React.cloneElement(selectedBlock.element, { meta: selectedBlock, fullScreen, setFullScreen })}
+                {selectedBlock && React.cloneElement(selectedBlock.element, { meta: selectedBlock, fullScreen, setFullScreen })}
             </ScrollArea>
-
         </>
     );
 };
@@ -313,7 +319,6 @@ const ToggleFullScreen = () => {
         </Toggle>
     )
 }
-
 
 Explorer.EmptyViewerState = EmptyViewerState;
 Explorer.ToggleFullScreen = ToggleFullScreen;

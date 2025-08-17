@@ -25,7 +25,7 @@ import useUserInfoStore from '@/store/user-info-store';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner";
-
+import translations from '@/lib/translations';
 
 const Files = ({ fullScreen }) => {
     const {
@@ -40,7 +40,7 @@ const Files = ({ fullScreen }) => {
         loading,
     } = useDashboardStore();
 
-    const { defaultParsedFile, setDefaultParsedFile } = useUserInfoStore()
+    const { defaultParsedFile, setDefaultParsedFile, language } = useUserInfoStore()
 
     const { request } = useApi();
     const [currentPage, setCurrentPage] = useState(1);
@@ -156,7 +156,7 @@ const Files = ({ fullScreen }) => {
                         <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
                             <File className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
                             <CardHeader className="space-y-1">
-                                <CardDescription className="text-muted-foreground">Total Files</CardDescription>
+                                <CardDescription className="text-muted-foreground">{translations?.files?.top?.total[language]}</CardDescription>
                                 <CardTitle className="text-lg font-semibold">{userFilesStats?.count?.total}</CardTitle>
                             </CardHeader>
                         </Card>
@@ -164,7 +164,7 @@ const Files = ({ fullScreen }) => {
                         <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
                             <FileKey2 className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
                             <CardHeader className="space-y-1">
-                                <CardDescription className="text-muted-foreground">Public Files</CardDescription>
+                                <CardDescription className="text-muted-foreground">{translations?.files?.top?.public[language]}</CardDescription>
                                 <CardTitle className="text-lg font-semibold">{userFilesStats?.count?.public}</CardTitle>
                             </CardHeader>
                         </Card>
@@ -172,7 +172,7 @@ const Files = ({ fullScreen }) => {
                         <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
                             <FileKey className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
                             <CardHeader className="space-y-1">
-                                <CardDescription className="text-muted-foreground">Private Files</CardDescription>
+                                <CardDescription className="text-muted-foreground">{translations?.files?.top?.private[language]}</CardDescription>
                                 <CardTitle className="text-lg font-semibold">{userFilesStats?.count?.private}</CardTitle>
                             </CardHeader>
                         </Card>
@@ -180,7 +180,7 @@ const Files = ({ fullScreen }) => {
                         <Card className="w-full shadow-sm hover:shadow-md transition-all relative">
                             <Archive className="absolute top-6 right-5 h-5 w-5 text-muted-foreground" />
                             <CardHeader className="space-y-1">
-                                <CardDescription className="text-muted-foreground">Used Storage</CardDescription>
+                                <CardDescription className="text-muted-foreground">{translations?.files?.top?.storage[language]}</CardDescription>
                                 <CardTitle className="text-lg font-semibold">{formatFileSize(userFilesStats?.sum?.fileSize)}</CardTitle>
                             </CardHeader>
                         </Card>
@@ -193,7 +193,7 @@ const Files = ({ fullScreen }) => {
                 {/* File List */}
                 <div className="w-full md:w-[50%] p-4">
                     <div className="flex flex-row items-center gap-2 text-md font-medium mb-4 ml-2">
-                        <p className="font-medium">Files</p>
+                        <p className="font-medium">{translations?.files?.header?.left[language]}</p>
                         <File className="h-4 w-4" />
                     </div>
                     <div className="rounded-md border">
@@ -227,9 +227,9 @@ const Files = ({ fullScreen }) => {
                             </TableBody>
                             <TableFooter>
                                 <TableRow>
-                                    <TableCell className="font-semibold">Total</TableCell>
+                                    <TableCell className="font-semibold">{translations?.text?.total[language]}</TableCell>
                                     <TableCell className="text-right font-semibold">
-                                        Current: {files.length} / Total: {total}
+                                        {translations?.text?.current[language]}: {files.length} / {translations?.text?.total[language]}: {total}
                                     </TableCell>
                                 </TableRow>
                             </TableFooter>
@@ -266,7 +266,7 @@ const Files = ({ fullScreen }) => {
                 {/* File Info */}
                 <div className="w-full md:w-[50%] p-4">
                     <div className="flex flex-row items-center gap-2 text-md font-medium mb-4 ml-2">
-                        <p className="font-medium">File Info</p>
+                        <p className="font-medium">{translations?.files?.header?.right[language]}</p>
                         <FileText className="h-4 w-4" />
                     </div>
 
@@ -309,13 +309,13 @@ const Files = ({ fullScreen }) => {
                                                     </DialogTrigger>
                                                     <DialogContent>
                                                         <DialogHeader>
-                                                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                                                            <DialogDescription>This action is irreversible. Deleting this file will permanently remove it. However, the chart associated with this file will remain unaffected.
+                                                            <DialogTitle>{translations?.files?.delete?.title[language]}</DialogTitle>
+                                                            <DialogDescription>{translations?.files?.delete?.description[language]}
 
                                                             </DialogDescription>
                                                         </DialogHeader>
                                                         <DialogFooter>
-                                                            <Button variant="success" disabled={loading.fileDelete} onClick={handleDelete}>{loading.fileDelete && <Loader2 className="animate-spin" />}Confirm</Button>
+                                                            <Button variant="success" disabled={loading.fileDelete} onClick={handleDelete}>{loading.fileDelete && <Loader2 className="animate-spin" />}{translations?.files?.text?.confirm[language]}</Button>
                                                         </DialogFooter>
                                                     </DialogContent>
                                                 </Dialog>
@@ -324,14 +324,14 @@ const Files = ({ fullScreen }) => {
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div><p className="text-muted-foreground">Rows</p><p>{selectedFile.rows}</p></div>
-                                        <div><p className="text-muted-foreground">Columns</p><p>{selectedFile.columns}</p></div>
-                                        <div><p className="text-muted-foreground">File Size</p><p>{selectedFile.fileSize ?? "-"} KB</p></div>
+                                        <div><p className="text-muted-foreground">{translations?.files?.text?.rows[language]}</p><p>{selectedFile.rows}</p></div>
+                                        <div><p className="text-muted-foreground">{translations?.files?.text?.columns[language]}</p><p>{selectedFile.columns}</p></div>
+                                        <div><p className="text-muted-foreground">{translations?.files?.text?.size[language]}</p><p>{selectedFile.fileSize ?? "-"} KB</p></div>
 
                                         <div className="mt-2">
                                             <Dialog>
                                                 <DialogTrigger asChild>
-                                                    <Button variant="secondary"><Eye />View Spreadsheet</Button>
+                                                    <Button variant="secondary"><Eye />{translations?.files?.text?.view[language]}</Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="sm:max-w-[800px]">
                                                     <DialogHeader>
@@ -353,12 +353,12 @@ const Files = ({ fullScreen }) => {
                                         </div>
 
                                         <div>
-                                            <Button variant="success" onClick={createChart}><Plus /> Create charts</Button>
+                                            <Button variant="success" onClick={createChart}><Plus /> {translations?.files?.text?.create[language]}</Button>
                                         </div>
 
 
                                         {currentFile?.sharing && <div>
-                                            <Button variant="secondary" onClick={() => copyUrl(`${window.location.origin}/file/${selectedFile?._id}`)}> {isCopied ? <Check /> : <Copy />} Copy Link</Button>
+                                            <Button variant="secondary" onClick={() => copyUrl(`${window.location.origin}/file/${selectedFile?._id}`)}> {isCopied ? <Check /> : <Copy />} {translations?.files?.text?.copy[language]}</Button>
                                         </div>}
 
 

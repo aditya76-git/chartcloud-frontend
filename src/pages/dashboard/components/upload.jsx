@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import translations from "@/lib/translations";
 import {
     Dialog,
     DialogContent,
@@ -57,7 +58,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
     const [showPicker, setShowPicker] = useState(false)
     const pickerRef = useRef(null)
 
-    const { setDefaultParsedFile } = useUserInfoStore()
+    const { setDefaultParsedFile, language } = useUserInfoStore()
 
     useEffect(
         () => { console.log("chartType", chartType) }, [chartType]
@@ -327,28 +328,28 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
     const chartSelect = {
         area: {
-            label: "Area",
+            label: translations?.chartSelect?.area?.title[language],
             subtypes: ["natural", "linear", "step"],
             icon: <ChartArea />,
-            description: "Displays cumulative totals with the area filled."
+            description: translations?.chartSelect?.area?.description[language]
         },
         bar: {
-            label: "Bar",
+            label: translations?.chartSelect?.bar?.title[language],
             subtypes: ["vertical", "horizontal"],
             icon: <ChartColumnIncreasing />,
-            description: "Compares quantities across categories."
+            description: translations?.chartSelect?.bar?.description[language]
         },
         line: {
-            label: "Line",
+            label: translations?.chartSelect?.line?.title[language],
             subtypes: ["natural", "linear", "step"],
             icon: <ChartLine />,
-            description: "Shows trends over time."
+            description: translations?.chartSelect?.line?.description[language]
         },
         radar: {
-            label: "Radar",
+            label: translations?.chartSelect?.radar[language],
             subtypes: ["grid", "no-grid"],
             icon: <Radar />,
-            description: "Shows strengths/weaknesses of multiple variables."
+            description: translations?.chartSelect?.radar?.description[language]
         }
     };
 
@@ -437,8 +438,8 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
             return (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <UploadIcon className="h-12 w-12 mb-4" />
-                    <p className="text-lg font-medium">Upload a file to get started</p>
-                    <p className="text-sm">Select an Excel file and configure your chart</p>
+                    <p className="text-lg font-medium">{translations?.uploadMeta?.title[language]}</p>
+                    <p className="text-sm">{translations?.uploadMeta?.description[language]}</p>
                 </div>
             );
         }
@@ -454,32 +455,10 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
         }
 
         return <ChartDialogContent />;
-    }, [isFileUploaded, chartType, chartSubType, xAxis, yAxis, parsedData]);
+    }, [isFileUploaded, chartType, chartSubType, xAxis, yAxis, parsedData, language]);
 
 
-    const ChartPreviewContent = () => {
-        if (!isFileUploaded) {
-            return (
-                <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                    <UploadIcon className="h-12 w-12 mb-4" />
-                    <p className="text-lg font-medium">Upload a file to get started</p>
-                    <p className="text-sm">Select an Excel file and configure your chart</p>
-                </div>
-            );
-        }
 
-        if (!chartType) {
-            return (
-                <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                    <ChartArea className="h-12 w-12 mb-4" />
-                    <p className="text-lg font-medium">Select a chart type to view chart</p>
-                    <p className="text-sm">Choose from area, bar, line, or radar charts</p>
-                </div>
-            );
-        }
-
-        return <ChartDialogContent />;
-    };
 
 
     const handleChartSave = async () => {
@@ -491,9 +470,9 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
         if (!chartName) {
             toast.error("Error ❌", {
-                description: "Please enter a Chart name",
+                description: translations?.upload?.text?.warning[language],
                 action: {
-                    label: "Close"
+                    label: translations?.upload?.text?.close[language]
                 }
             });
             return
@@ -514,7 +493,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                 <div className={clsx("border-r border-b p-4", fullScreen && "border-l border-t")}>
                     {!defaultParsedFile && <div>
                         <div className="p-2 space-y-4">
-                            <Label htmlFor="file">Upload Excel File (.xlsx)</Label>
+                            <Label htmlFor="file">{translations?.uploadMeta.title[language]} (.xlsx)</Label>
                             <div className="flex flex-row gap-2 w-full">
                                 <Input
                                     id="file"
@@ -545,13 +524,13 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                                     onClick={() => setDefaultParsedFile(null)}
                                     className="basis-1/4 flex justify-center"
                                 >
-                                    Go Back
+                                    {translations?.upload?.text?.back[language]}
 
                                 </Button>
                             </div>
 
                             <div className="flex flex-row gap-2 w-full">
-                                <p className="text-sm text-muted-foreground font-medium">ID: {defaultParsedFile?.id}</p>
+                                <p className="text-sm text-muted-foreground font-medium">translations?.upload?.text?.id[language]: {defaultParsedFile?.id}</p>
                             </div>
 
                         </div>
@@ -561,16 +540,16 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
                 <div className={clsx("border-b p-4", fullScreen && "border-t border-r", chartSectionDisabled && "opacity-50")}>
                     <div className="p-2 space-y-4">
-                        <p className="font-medium text-sm">Select X and Y axis</p>
+                        <p className="font-medium text-sm">{translations?.selectMeta?.complete?.title[language]}</p>
 
                         <div className="flex flex-row gap-3">
                             <Select onValueChange={setXAxis} disabled={chartSectionDisabled}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select X-Axis" />
+                                    <SelectValue placeholder={translations?.selectMeta?.x[language]} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Rows</SelectLabel>
+                                        <SelectLabel>{translations?.rows[language]}</SelectLabel>
                                         {
                                             parsedData.length > 0 && Object.keys(parsedData[0]).map((key) => {
                                                 const isNumeric = typeof parsedData[0][key] === "number";
@@ -587,11 +566,11 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
                             <Select onValueChange={setYAxis} disabled={chartSectionDisabled}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select Y-Axis" />
+                                    <SelectValue placeholder={translations?.selectMeta?.y[language]} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Columns</SelectLabel>
+                                        <SelectLabel>{translations?.columns[language]}</SelectLabel>
                                         {
                                             parsedData.length > 0 && Object.keys(parsedData[0]).map((key) => {
                                                 const isNumeric = typeof parsedData[0][key] === "number";
@@ -614,7 +593,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
             )}>
                 <div className={clsx("border-r border-b", fullScreen && "border-l", chartSectionDisabled && "opacity-50")}>
                     <div className="p-4 border-b items-center">
-                        <p className="ml-2 mt-0 text-sm font-medium">Chart Type</p>
+                        <p className="ml-2 mt-0 text-sm font-medium">{translations?.chartType[language]}</p>
                     </div>
                     <div className="grid grid-cols-2">
                         {Object.keys(chartSelect).map((type, index) => {
@@ -647,15 +626,15 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                     </div>
 
                     <div className={clsx("p-4 items-center flex space-x-2 justify-evenly", fullScreen && "border-b")}>
-                        <p className="ml-2 mt-0 text-sm font-medium">Chart SubType</p>
+                        <p className="ml-2 mt-0 text-sm font-medium">{translations?.chartSubType[language]}</p>
                         {chartType && chartSelect[chartType].subtypes.length > 0 && (
                             <Select onValueChange={setChartSubType} className="basis-[60%]" disabled={chartSectionDisabled}>
                                 <SelectTrigger className="w-[200px]">
-                                    <SelectValue placeholder="Chart SubType" />
+                                    <SelectValue placeholder="{translations?.chartSubType[language]}" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Chart SubTypes</SelectLabel>
+                                        <SelectLabel>{translations?.chartSubType[language]}</SelectLabel>
                                         {chartSelect[chartType].subtypes.map((subtype) => (
                                             <SelectItem key={subtype} value={subtype}>
                                                 {subtype.charAt(0).toUpperCase() + subtype.slice(1)}
@@ -741,7 +720,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                                 <DialogContent className="sm:max-w-[800px]">
                                     <DialogHeader className="flex justify-between items-start">
                                         <div>
-                                            <DialogTitle>Chart Preview</DialogTitle>
+                                            <DialogTitle>{translations?.upload?.text?.preview[language]}</DialogTitle>
                                             <DialogDescription>
                                                 {filename}
                                             </DialogDescription>

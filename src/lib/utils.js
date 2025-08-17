@@ -48,13 +48,30 @@ export const timeAgo = (dateString) => {
   const now = new Date();
   const diff = Math.floor((now - date) / 1000); // in seconds
 
-  if (isNaN(diff) || diff < 0) return "just now";
+  if (isNaN(diff) || diff < 0 || diff < 60) {
+    return { value: 0, unit: "just" };
+  }
 
-  if (diff < 60) return "just now";
-  if (diff < 3600) return `${Math.floor(diff / 60)} minute(s) ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hour(s) ago`;
-  if (diff < 172800) return "yesterday";
-  if (diff < 2592000) return `${Math.floor(diff / 86400)} day(s) ago`;
-  if (diff < 31536000) return `${Math.floor(diff / 2592000)} month(s) ago`;
-  return `${Math.floor(diff / 31536000)} year(s) ago`;
-}
+  if (diff < 3600) {
+    return { value: Math.floor(diff / 60), unit: "minutes" };
+  }
+
+  if (diff < 86400) {
+    return { value: Math.floor(diff / 3600), unit: "hours" };
+  }
+
+  if (diff < 172800) {
+    return { value: 1, unit: "day" }; // "yesterday"
+  }
+
+  if (diff < 2592000) {
+    return { value: Math.floor(diff / 86400), unit: "days" };
+  }
+
+  if (diff < 31536000) {
+    return { value: Math.floor(diff / 2592000), unit: "months" };
+  }
+
+  return { value: Math.floor(diff / 31536000), unit: "years" };
+};
+

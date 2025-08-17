@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { File, FileText, Trash2, ChartLine, Download, Loader2, Columns2, Rows2, FileDigit, Archive } from 'lucide-react';
 
 import useDashboardStore from "@/store/dashboard-store";
+import useUserInfoStore from '@/store/user-info-store';
 import useApi from "@/hooks/useApi";
 import clsx from "clsx";
 import { formatTime, camelToLabel, formatFileSize } from "@/lib/utils";
@@ -27,7 +28,7 @@ import {
 import { ChartElementMapping } from '@/pages/dashboard/charts/config';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
+import translations from '@/lib/translations';
 const Charts = ({ fullScreen }) => {
 
     const { fileId } = useParams()
@@ -40,6 +41,7 @@ const Charts = ({ fullScreen }) => {
         error,
         response
     } = useDashboardStore();
+    const { language } = useUserInfoStore()
     const location = useLocation();
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -186,7 +188,7 @@ const Charts = ({ fullScreen }) => {
             <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-[50%] p-4">
                     <div className="flex flex-row items-center gap-2 text-md font-medium mb-4 ml-2">
-                        <p className="font-medium">Charts</p>
+                        <p className="font-medium">{translations?.charts?.header?.left[language]}</p>
                         <File className="h-4 w-4" />
                     </div>
 
@@ -194,9 +196,9 @@ const Charts = ({ fullScreen }) => {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>File Name</TableHead>
-                                    <TableHead className="text-right">Type</TableHead>
-                                    <TableHead className="text-right">Created at</TableHead>
+                                    <TableHead>{translations?.charts?.text?.name[language]}</TableHead>
+                                    <TableHead className="text-right">{translations?.charts?.text?.type[language]}</TableHead>
+                                    <TableHead className="text-right">{translations?.charts?.text?.created[language]}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -268,7 +270,7 @@ const Charts = ({ fullScreen }) => {
 
                 <div className="w-full md:w-[50%] p-4">
                     <div className="flex flex-row items-center gap-2 text-md font-medium mb-4 ml-2">
-                        <p className="font-medium">Chart Info</p>
+                        <p className="font-medium">{translations?.charts?.header?.right[language]}</p>
                         <FileText className="h-4 w-4" />
                     </div>
 
@@ -294,15 +296,15 @@ const Charts = ({ fullScreen }) => {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <p className="text-muted-foreground">Created at</p>
+                                        <p className="text-muted-foreground">{translations?.charts?.text?.created[language]}</p>
                                         <p>{formatTime(new Date(selectedChart.createdAt), "en-GB")}</p>
                                     </div>
                                     <div>
-                                        <p className="text-muted-foreground">X Axis</p>
+                                        <p className="text-muted-foreground">{translations?.charts?.text?.x[language]}</p>
                                         <p>{camelToLabel(selectedChart.xAxisDataKey)}</p>
                                     </div>
                                     <div>
-                                        <p className="text-muted-foreground">Y Axis</p>
+                                        <p className="text-muted-foreground">{translations?.charts?.text?.y[language]}</p>
                                         <p>{camelToLabel(selectedChart.yAxisDataKey)}</p>
                                     </div>
 
@@ -310,7 +312,7 @@ const Charts = ({ fullScreen }) => {
                                         <Dialog>
                                             <DialogTrigger asChild>
                                                 <Button variant="secondary">
-                                                    <ChartLine /> View Chart
+                                                    <ChartLine /> {translations?.charts?.text?.view[language]}
                                                 </Button>
                                             </DialogTrigger>
                                             <DialogContent className="sm:max-w-[800px]">
@@ -318,7 +320,7 @@ const Charts = ({ fullScreen }) => {
                                                     <DialogTitle>{selectedChart.name}</DialogTitle>
                                                     <DialogDescription>
                                                         <Button className="mt-2" variant="outline" onClick={handleDownloadImage}>
-                                                            {downloadLoading.image ? <Loader2 className="animate-spin" /> : <Download />} Download Image
+                                                            {downloadLoading.image ? <Loader2 className="animate-spin" /> : <Download />} {translations?.charts?.text?.download[language]}
                                                         </Button>
                                                     </DialogDescription>
                                                 </DialogHeader>
@@ -326,8 +328,8 @@ const Charts = ({ fullScreen }) => {
                                                     <ChartDialogContent />
                                                 </div>
                                                 <DialogFooter>
-                                                    <p className="text-sm font-medium">X Axis: {camelToLabel(selectedChart.xAxisDataKey)}</p>
-                                                    <p className="text-sm font-medium">Y Axis: {camelToLabel(selectedChart.yAxisDataKey)}</p>
+                                                    <p className="text-sm font-medium">{translations?.charts?.text?.x[language]}: {camelToLabel(selectedChart.xAxisDataKey)}</p>
+                                                    <p className="text-sm font-medium">{translations?.charts?.text?.y[language]}: {camelToLabel(selectedChart.yAxisDataKey)}</p>
                                                 </DialogFooter>
                                             </DialogContent>
                                         </Dialog>
@@ -337,18 +339,18 @@ const Charts = ({ fullScreen }) => {
                                         <Dialog>
                                             <DialogTrigger asChild>
                                                 <Button variant="destructive">
-                                                    <Trash2 className="w-5 h-5" /> Delete Chart
+                                                    <Trash2 className="w-5 h-5" /> {translations?.charts?.text?.delete[language]}
                                                 </Button>
                                             </DialogTrigger>
                                             <DialogContent>
                                                 <DialogHeader>
-                                                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                    <DialogTitle>{translations?.charts?.delete?.title[language]}</DialogTitle>
                                                     <DialogDescription>
-                                                        This action is irreversible. Deleting this chart will permanently remove it. However, the file associated with this chart will remain unaffected.
+                                                        {translations?.charts?.delete?.description[language]}
                                                     </DialogDescription>
                                                 </DialogHeader>
                                                 <DialogFooter>
-                                                    <Button variant="success" disabled={loading.chartDelete} onClick={handleDelete}>{loading.chartDelete && <Loader2 className="animate-spin" />}Confirm</Button>
+                                                    <Button variant="success" disabled={loading.chartDelete} onClick={handleDelete}>{loading.chartDelete && <Loader2 className="animate-spin" />}{translations?.charts?.text?.confirm[language]}</Button>
                                                 </DialogFooter>
                                             </DialogContent>
                                         </Dialog>

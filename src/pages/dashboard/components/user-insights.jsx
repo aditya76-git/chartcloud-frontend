@@ -18,11 +18,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useDashboardStore from "@/store/dashboard-store";
+import useUserInfoStore from "@/store/user-info-store";
 import clsx from "clsx";
 import { ChartPie, User } from "lucide-react";
 import { useEffect } from "react";
 import { Pie, PieChart } from "recharts";
-
+import translations from "@/lib/translations";
 const chartConfig = {
   visitors: {
     label: "Visitors",
@@ -41,8 +42,10 @@ const chartConfig = {
   },
 };
 
-const UserInsights = ({fullScreen}) => {
+const UserInsights = ({ fullScreen }) => {
   const { userStats, loading, getUserStats } = useDashboardStore();
+  const { language } = useUserInfoStore()
+
 
   useEffect(() => {
     getUserStats();
@@ -58,23 +61,23 @@ const UserInsights = ({fullScreen}) => {
 
   const userStatsList = [
     {
-      label: "Verified Users",
+      label: translations?.insights?.stats?.verified[language],
       count: userStats?.verified,
     },
     {
-      label: "Unverified Users",
+      label: translations?.insights?.stats?.unverified[language],
       count: userStats?.unverified,
     },
     {
-      label: "Email Login",
+      label: translations?.insights?.stats?.email[language],
       count: userStats?.email,
     },
     {
-      label: "Google Login",
+      label: translations?.insights?.stats?.google[language],
       count: userStats?.google,
     },
     {
-      label: "Github Login",
+      label: translations?.insights?.stats?.github[language],
       count: userStats?.github,
     },
   ];
@@ -104,7 +107,7 @@ const UserInsights = ({fullScreen}) => {
 
 
         <div className="flex flex-row items-center justify-start gap-2 text-md font-medium mb-4 ml-2">
-          <p className="font-medium">User Stats</p>
+          <p className="font-medium">{translations?.insights?.header?.left[language]}</p>
           <User className="h-4 w-4" />
         </div>
 
@@ -112,7 +115,7 @@ const UserInsights = ({fullScreen}) => {
         <div className="rounded-md border">
 
           <Table>
-            <TableCaption className="mb-4">A breakdown of all user status.</TableCaption>
+            <TableCaption className="mb-4">{translations?.insights?.footer?.left?.title[language]}</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead>Status</TableHead>
@@ -154,10 +157,10 @@ const UserInsights = ({fullScreen}) => {
 
       <div className="md:w-1/2 w-full p-4">
 
-              
+
 
         <div className="flex flex-row items-center justify-center gap-2 text-md font-medium mb-4">
-          <p className="font-medium">Login Method Distribution</p>
+          <p className="font-medium">{translations?.insights?.header?.right[language]}</p>
           <ChartPie className="h-4 w-4" />
         </div>
 
@@ -194,9 +197,9 @@ const UserInsights = ({fullScreen}) => {
 
 
         <div className="mt-6 text-center text-sm">
-          <div className="font-medium">User Login Breakdown</div>
+          <div className="font-medium">{translations?.insights?.footer?.right?.title[language]}</div>
           <div className="text-muted-foreground">
-            Based on all-time user authentication data
+            {translations?.insights?.footer?.right?.subtitle[language]}
           </div>
         </div>
       </div>

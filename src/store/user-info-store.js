@@ -7,6 +7,11 @@ const useUserInfoStore = create(set => ({
     defaultParsedFile: null,
     setDefaultParsedFile: (file) => {
         set({ defaultParsedFile: file })
+    },
+    language: localStorage.getItem('language') ?? "en",
+    setLanguage: (language) => {
+        set({ language: language })
+        localStorage.setItem("language", language)
     }
 }))
 
