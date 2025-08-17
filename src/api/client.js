@@ -85,8 +85,7 @@ api.interceptors.request.use(async (config) => {
         /^\/auth\/signup$/,
         /^\/auth\/login$/,
         /^\/auth\/login\/google\/callback$/,
-        /^\/auth\/login\/github\/callback$/,
-        /^\/user\/files\/[^\/]+\/charts(?:\?[^\/]*)?$/,
+        /^\/auth\/login\/github\/callback$/
     ];
 
     const needsAuth = !noTokenRoutes.some(pattern => pattern.test(url));
