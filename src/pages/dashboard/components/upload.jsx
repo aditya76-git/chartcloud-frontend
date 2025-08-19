@@ -530,7 +530,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                             </div>
 
                             <div className="flex flex-row gap-2 w-full">
-                                <p className="text-sm text-muted-foreground font-medium">translations?.upload?.text?.id[language]: {defaultParsedFile?.id}</p>
+                                <p className="text-sm text-muted-foreground font-medium">{translations?.upload?.text?.id[language]}: {defaultParsedFile?.id}</p>
                             </div>
 
                         </div>
@@ -630,7 +630,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                         {chartType && chartSelect[chartType].subtypes.length > 0 && (
                             <Select onValueChange={setChartSubType} className="basis-[60%]" disabled={chartSectionDisabled}>
                                 <SelectTrigger className="w-[200px]">
-                                    <SelectValue placeholder="{translations?.chartSubType[language]}" />
+                                    <SelectValue placeholder={translations?.chartSubType[language]} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
