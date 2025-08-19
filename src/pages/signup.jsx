@@ -73,6 +73,7 @@ const Signup = () => {
                     <Input
                       id="password"
                       type="password"
+                      autoComplete="off"
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
