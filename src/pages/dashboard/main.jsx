@@ -1,5 +1,7 @@
 import Explorer from "@/components/layout/explorer";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import translations from "@/lib/translations";
 import Charts from "@/pages/dashboard/components/charts";
 import Files from "@/pages/dashboard/components/files";
 import IntroHeader from "@/pages/dashboard/components/intro-header";
@@ -10,28 +12,19 @@ import UserInsights from "@/pages/dashboard/components/user-insights";
 import Users from "@/pages/dashboard/components/users";
 import Verification from "@/pages/dashboard/components/verification";
 import useUserInfoStore from "@/store/user-info-store";
-import { ChartArea, ChartLine, PanelsTopLeft, UploadCloud, UsersRound, Sun, Moon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChartArea, ChartLine, PanelsTopLeft, UploadCloud, UsersRound } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import translations from "@/lib/translations";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import TranslationAvatar from "./components/translation-avatar";
 
 const Dashboard = () => {
 
@@ -143,58 +136,14 @@ const Dashboard = () => {
           <Explorer.NavigatorRight>
 
             <Explorer.NavigatorMobileOnly>
-              <ProfileCircle {...userInfo} />
+              {/* <ProfileCircle {...userInfo} /> */}
+              <TranslationAvatar />
             </Explorer.NavigatorMobileOnly>
 
             <Explorer.NavigatorDesktopOnly>
               <LiveTime />
+              <TranslationAvatar />
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative h-8 w-8 rounded-full"
-                    aria-label="User menu"
-                  >
-                    <Avatar className="h-7 w-7">
-                      <AvatarFallback>{language.toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{translations?.app?.language?.title[language]}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{translations?.app?.language?.subtitle[language]}</p>
-
-                    </div>
-                  </DropdownMenuLabel>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem onClick={() => setLanguage("en")} className="justify-between">
-                    ENGLISH
-                    <span className="text-muted-foreground text-xs">EN</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLanguage("es")} className="justify-between">
-                    SPANISH
-                    <span className="text-muted-foreground text-xs">ES</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLanguage("hi")} className="justify-between">
-                    HINDI
-                    <span className="text-muted-foreground text-xs">HI</span>
-                  </DropdownMenuItem>
-            
-
-
-
-                  {/* <DropdownMenuItem onClick={handleLogout}>
-                    Log out {loading && <Loader2 className="ml-auto h-4 w-4 animate-spin" />}
-                    <DropdownMenuShortcut>⇧ + Q</DropdownMenuShortcut>
-                  </DropdownMenuItem> */}
-                </DropdownMenuContent>
-              </DropdownMenu>
 
             </Explorer.NavigatorDesktopOnly>
 

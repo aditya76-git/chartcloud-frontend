@@ -289,7 +289,7 @@ const Charts = ({ fullScreen }) => {
                                     <div className="flex flex-col sm:flex-row justify-between gap-4">
                                         <div className="flex flex-col">
                                             <h2 className="text-md font-bold break-all">{selectedChart.name}</h2>
-                                            <p className="text-md text-muted-foreground">{response?.file?.filename}</p>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -319,17 +319,19 @@ const Charts = ({ fullScreen }) => {
                                                 <DialogHeader>
                                                     <DialogTitle>{selectedChart.name}</DialogTitle>
                                                     <DialogDescription>
-                                                        <Button className="mt-2" variant="outline" onClick={handleDownloadImage}>
-                                                            {downloadLoading.image ? <Loader2 className="animate-spin" /> : <Download />} {translations?.charts?.text?.download[language]}
-                                                        </Button>
+
                                                     </DialogDescription>
                                                 </DialogHeader>
                                                 <div ref={printRef}>
                                                     <ChartDialogContent />
                                                 </div>
                                                 <DialogFooter>
-                                                    <p className="text-sm font-medium">{translations?.charts?.text?.x[language]}: {camelToLabel(selectedChart.xAxisDataKey)}</p>
-                                                    <p className="text-sm font-medium">{translations?.charts?.text?.y[language]}: {camelToLabel(selectedChart.yAxisDataKey)}</p>
+                                                    <Button className="mr-auto" variant="secondary" onClick={handleDownloadImage}>
+                                                        {downloadLoading.image ? <Loader2 className="animate-spin" /> : <Download />} {translations?.charts?.text?.download[language]}
+                                                    </Button>
+
+                                                    <p className="text-sm font-medium mt-2">{translations?.charts?.text?.x[language]}: {camelToLabel(selectedChart.xAxisDataKey)}</p>
+                                                    <p className="text-sm font-medium mt-2">{translations?.charts?.text?.y[language]}: {camelToLabel(selectedChart.yAxisDataKey)}</p>
                                                 </DialogFooter>
                                             </DialogContent>
                                         </Dialog>

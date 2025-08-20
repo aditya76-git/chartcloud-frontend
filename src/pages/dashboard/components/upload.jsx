@@ -60,10 +60,6 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
     const { setDefaultParsedFile, language } = useUserInfoStore()
 
-    useEffect(
-        () => { console.log("chartType", chartType) }, [chartType]
-    )
-
     useEffect(() => {
         if (defaultParsedFile?.parsed?.length > 0) {
             setParsedData(defaultParsedFile.parsed);
@@ -531,7 +527,11 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
 
                             <div className="flex flex-row gap-2 w-full">
                                 <p className="text-sm text-muted-foreground font-medium">{translations?.upload?.text?.id[language]}: {defaultParsedFile?.id}</p>
+
+                               
                             </div>
+
+
 
                         </div>
                     </div>}
@@ -729,7 +729,7 @@ const Upload = ({ fullScreen, defaultParsedFile = null }) => {
                                     <div ref={printRef}>
                                         <ChartDialogContent />
                                     </div>
-                                    <DialogFooter />
+                                  
                                 </DialogContent>
                             </Dialog>
                         </div>

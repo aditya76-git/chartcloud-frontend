@@ -56,8 +56,6 @@ export const ChartElementMapping = {
         );
     },
     barHorizontal: (config, data, xAxisDataKey, yAxisDataKey) => {
-        console.log("xAxisDataKey", xAxisDataKey, "yAxisDataKey", yAxisDataKey)
-        console.log(data)
         return (
             <ChartContainer config={config}>
 

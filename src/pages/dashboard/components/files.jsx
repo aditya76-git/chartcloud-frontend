@@ -134,7 +134,7 @@ const Files = ({ fullScreen }) => {
 
 
     if (defaultParsedFile) {
-        return <Upload defaultParsedFile={defaultParsedFile} />
+        return <Upload fullScreen = {fullScreen} defaultParsedFile={defaultParsedFile} />
     }
 
     return (
